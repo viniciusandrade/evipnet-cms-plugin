@@ -1,6 +1,6 @@
 <?php
 
-add_action('init', 'create_evipnet_post_type');
+
 
 function create_evipnet_post_type() {
 	register_post_type( 'evipnet',
@@ -77,7 +77,6 @@ function create_evipnet_post_type() {
                             'rewrite' => true 
                         ) 
                     );  
-
 }
 
 /* Adds a box to the main column on the Post and Page edit screens */
@@ -160,6 +159,8 @@ function evipnet_print_metafield($meta){
     
 }
 
+
+
 // Save the Metabox Data 
 function save_evipnet_meta($post_id, $post) {
     global $post, $meta_fields;
@@ -195,7 +196,35 @@ function save_evipnet_meta($post_id, $post) {
     }
  
 }
+
  
+function evipnet_edit_columns($columns){
+  $columns = array(
+    "cb" => "<input type=\"checkbox\" />",
+    "title" => "Title",
+    "type_of_evidence" => "Type of evidence",
+  );
+ 
+  return $columns;
+}
+function evipnet_custom_columns($column){
+  global $post;
+ 
+  switch ($column) {
+    case "description":
+      the_excerpt();
+      break;
+    case "type_of_evidence":
+      echo get_the_term_list($post->ID, 'type_of_evidence', '', ', ','');
+      break;
+  }
+}
+ 
+add_action('init', 'create_evipnet_post_type');
 add_action('save_post', 'save_evipnet_meta', 1, 2); // save the custom fields
+add_action('manage_posts_custom_column',  'evipnet_custom_columns');
+
+add_filter('manage_edit-evipnet_columns', 'evipnet_edit_columns');
+
 
 ?>

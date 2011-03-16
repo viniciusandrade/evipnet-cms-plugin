@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: EVIPNet CMS plugin
+Plugin Name: EVIPNet Metadata
 Description: Handles creation of EVIPNet metadata content.
 Author: BIREME
 Version: 0.1
