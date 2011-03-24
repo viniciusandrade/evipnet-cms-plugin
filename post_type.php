@@ -1,7 +1,5 @@
 <?php
 
-
-
 function create_evipnet_post_type() {
 	register_post_type( 'evipnet',
 		array(
@@ -21,7 +19,7 @@ function create_evipnet_post_type() {
             'show_ui' => true,
 			'has_archive' => true,
 			'rewrite' => array('slug' => 'metadata'),
-            'supports' => array('title'),
+            'supports' => array('title', 'author'),
             'menu_position' => 5,
             'capability_type' => 'post',
             'register_meta_box_cb' => 'add_evipnet_metaboxes'
@@ -84,28 +82,38 @@ function create_evipnet_post_type() {
 
 $meta_fields[] = array( "name" => "Author",
                         "desc" => "Document author",
-                        "id" => "evipnet_author",
+                        "id" => "_evipnet_author",
                         "type" => "text");
 
 $meta_fields[] = array( "name" => "Abstract",
                         "desc" => "Document abstract",
-                        "id" => "evipnet_abstract",
+                        "id" => "_evipnet_abstract",
                         "type" => "textarea");
 
 $meta_fields[] = array( "name" => "Date",
                         "desc" => "Publish date",
-                        "id" => "evipnet_date",
+                        "id" => "_evipnet_date",
                         "type" => "text");
 
 $meta_fields[] = array( "name" => "Journal",
                         "desc" => "Journal",
-                        "id" => "evipnet_journal",
+                        "id" => "_evipnet_journal",
+                        "type" => "text");
+
+$meta_fields[] = array( "name" => "Volume",
+                        "desc" => "Volume",
+                        "id" => "_evipnet_volume",
                         "type" => "text");
 
 $meta_fields[] = array( "name" => "Page numbers",
                         "desc" => "Page numbers",
-                        "id" => "evipnet_page",
+                        "id" => "_evipnet_pages",
                         "type" => "text");
+
+$meta_fields[] = array( "name" => "Documento",
+                        "desc" => "Documento",
+                        "id" => "_evipnet_file",
+                        "type" => "file");
 
 
 function add_evipnet_metaboxes() {
@@ -123,14 +131,12 @@ function evipnet_inner_custom_box() {
     // Noncename needed to verify where the data originated
     echo '<input type="hidden" name="evipnet_noncename" id="evipnet_noncename" value="' . wp_create_nonce( plugin_basename(__FILE__) ) . '" />';
 
-    echo '<div id="postcustomstuff">';
-    echo '    <table id="newmeta">';
+    echo '<div class="evip-metabox-field-group">';
     
-    foreach ($meta_fields as $meta){
-          evipnet_print_metafield($meta);  
+    foreach ($meta_fields as $field){
+          evipnet_print_metafield($field);  
     }
 
-    echo '    </table>';
     echo '</div>';
     
     // Get the location data if its already been entered
@@ -139,23 +145,67 @@ function evipnet_inner_custom_box() {
 
 }
 
-function evipnet_print_metafield($meta){
+function evipnet_print_metafield($field){
     global $post;
     
-    $field_value = get_post_meta($post->ID, $meta['id'], true);
+    $field_id = $field["id"];
+    $field_name = $field["name"];
+    $field_type = $field["type"];
     
-    echo '<tr><td id="newmetaleft" class="left"><strong>' . $meta['name'] .':</strong></td>';
+    $field_value = get_post_meta($post->ID, $field_id, true);
     
-    switch ($meta['type']){
+    echo '<div class="evip-metabox-field">';
+    
+            
+    switch ($field_type){
         case 'text':
-            echo '<td><input type="text" name="' . $meta['id']  .'" value="' . $field_value . '" style="width: 95%;" /></td>';
+            echo '    <div class="evip-metabox-field-col1">';
+            echo '        <label for="' . $field_id . '">'. $field_name .'</label>';
+            echo '    </div>';
+            echo '    <div class="evip-metabox-field-col2">';
+            echo '        <input class="text" name="'. $field_id . '" id="' . $field_id . '" value="' . $field_value . '">';            
+            echo '     </div>';
             break;
         case 'textarea':
-            echo '<td><textarea id="' . $meta['id'] . '" name="'. $meta['id'] . '" rows="5"  tabindex="8">' . $field_value . ' </textarea></td>';
+            echo '     <div class="evip-metabox-field-col1">';
+            echo '         <label for="' . $field_id . '">'. $field_name .'</label>';
+            echo '     </div>';
+
+            echo '     <div class="evip-metabox-field-col2">';            
+            echo '        <textarea id="' . $field_id . '" name="'. $field_id . '" rows="5">' . $field_value . ' </textarea>';
+            echo '     </div>';
+            break;
+        case 'file':
+            $attachment_id = (int) $field_value;
+
+            $file_html = "";
+            $file_name = "";
+            if ($attachment_id) {
+                $file_thumbnail = wp_get_attachment_image_src( $attachment_id, 'thumbnail', true );
+                $file_thumbnail = $file_thumbnail[0];
+                $file_html = "<img src='$file_thumbnail' alt='' />";
+                $file_post = get_post($attachment_id);
+                $file_name = esc_html($file_post->post_title);
+            }
+        
+            echo '<div class="simple-fields-metabox-field">';
+            echo '   <div class="simple-fields-metabox-field-file"><label>' . $field_name . '</label>';
+            echo '      <div class="simple-fields-metabox-field-file-col1">';
+            echo '      <div class="simple-fields-metabox-field-file-selected-image">' . $file_html  . '</div>';
+            echo '   </div>';
+        
+            echo '   <div class="simple-fields-metabox-field-file-col2">';
+            echo '      <input type="hidden" name="' . $field_id .'" id="'. $field_id .'" value="' . $field_value .'" />';
+            echo '      <div class="simple-fields-metabox-field-file-selected-image-name">' . $file_name . '</div>';
+            echo '          <a class="thickbox simple-fields-metabox-field-file-select" href="media-upload.php?simple_fields_dummy=1&simple_fields_action=select_file&simple_fields_file_field_unique_id=' . $field_id .'&post_id=-1&TB_iframe=true&width=640&height=426">Select file</a> | <a href="#" class="simple-fields-metabox-field-file-clear">Clear</a>';
+            echo '      </div>';
+            echo '   </div>';
+            echo '</div>';
             break;
 
+
     }    
-    echo '</tr>';
+    echo '</div>';
     
 }
 
