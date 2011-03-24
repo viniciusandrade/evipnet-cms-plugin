@@ -20,8 +20,6 @@ function evip_init() {
     wp_enqueue_script("jquery-ui-core");
     wp_enqueue_script("jquery-ui-sortable");
 
-    wp_enqueue_script("jquery-ui-effects-core", "http://jquery-ui.googlecode.com/svn/tags/1.7.3/ui/effects.core.js");
-    wp_enqueue_script("jquery-ui-effects-highlight", "http://jquery-ui.googlecode.com/svn/tags/1.7.3/ui/effects.highlight.js");
     wp_enqueue_script("thickbox");
     wp_enqueue_style("thickbox");
 

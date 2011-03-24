@@ -1,0 +1,57 @@
+.evip-metabox-field,
+.evip-metabox-field-add {
+	margin-top: .5em;
+	margin-bottom: .5em;
+}
+
+.evip-metabox-field-file {
+	height: 64px;
+}
+
+.evip-metabox-field-file-col1 {
+	width: 46px;
+	height: 46px;
+	background-color: #eee;
+	border: 1px solid #ddd;
+	overflow: hidden;
+}
+
+.evip-metabox-field-group{
+    padding: 10px;
+}
+
+.evip-metabox-field{
+    clear: both;
+    margin-bottom: 20px;
+    
+}
+
+.evip-metabox-field-file-col2 {
+	margin-left: 56px;
+	margin-top: -46px;
+}
+
+.evip-metabox-field-col1{
+    float: left;
+    width: 30%;
+}
+
+.evip-metabox-field-col2{
+    float: left;
+    width: 70%;
+}
+
+.evip-metabox-field input.text {
+	border: 1px solid #dfdfdf;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
+}
+.evip-metabox-field input.text,
+.evip-metabox-field textarea{
+	width: 95%;
+}
+
+.evip-metabox-field label{
+    font-weight: bold;
+}
