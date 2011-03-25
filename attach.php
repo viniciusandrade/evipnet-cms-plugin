@@ -55,7 +55,6 @@ function evip_attachment_fields_to_edit($form_fields, $post) {
 			$form_fields["image_alt"],
 			$form_fields["menu_order"]
 		);
-		#bonny_d($form_fields);
 	}
 	return $form_fields;
 }
@@ -100,7 +99,6 @@ function evip_media_send_to_editor($html, $id) {
 	_wp_http_referer=/wp-admin/media-upload.php?simple_fields_action=select_file&simple_fields_file_field_unique_id=simple_fields_fieldgroups_8_4_new0&tab=library
 	*/
 	parse_str($_POST["_wp_http_referer"], $arr_postinfo);
-	#bonny_d($arr_url);
 	/*
 	Array
 	(
