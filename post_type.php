@@ -3,7 +3,7 @@
 function create_evipnet_post_type() {
 	register_post_type( 'evipnet',
 		array(
-       'labels' => array(
+       'labels' => array(                
                 'name' => __( 'EVIPNet Metadata' ),
                 'singular_name' => __( 'Metadata' ),
                 'add_new' => __( 'Add New Metadata' ),
@@ -13,7 +13,8 @@ function create_evipnet_post_type() {
                 'view_item' => __( 'View Metadata' ),
                 'search_items' => __( 'Search Metadata' ),
                 'not_found' => __( 'No metadata found' ),
-                'not_found_in_trash' => __( 'No metadata found in trash' )
+                'not_found_in_trash' => __( 'No metadata found in trash' ),
+                'menu_name' => 'EVIPNet',
             ),
 			'public' => true,
             'show_ui' => true,
@@ -110,9 +111,14 @@ $meta_fields[] = array( "name" => "Page numbers",
                         "id" => "_evipnet_pages",
                         "type" => "text");
 
+$meta_fields[] = array( "name" => "Full text URL",
+                        "desc" => "Full text URL",
+                        "id" => "_evipnet_fulltext_url",
+                        "type" => "text");
+
 $meta_fields[] = array( "name" => "Documento",
                         "desc" => "Documento",
-                        "id" => "_evipnet_file",
+                        "id" => "_evipnet_fulltext_file",
                         "type" => "file");
 
 

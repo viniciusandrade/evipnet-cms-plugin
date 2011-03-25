@@ -5,7 +5,7 @@
 }
 
 .evip-metabox-field-file {
-	height: 64px;
+	height: 64px;    
 }
 
 .evip-metabox-field-file-col1 {
@@ -21,24 +21,22 @@
 }
 
 .evip-metabox-field{
-    clear: both;
     margin-bottom: 20px;
+    width: 100%;
+    clear: both;
     
 }
 
 .evip-metabox-field-file-col2 {
-	margin-left: 56px;
-	margin-top: -46px;
+
 }
 
 .evip-metabox-field-col1{
-    float: left;
-    width: 30%;
+    margin-bottom: 7px;
 }
 
 .evip-metabox-field-col2{
-    float: left;
-    width: 70%;
+    
 }
 
 .evip-metabox-field input.text {

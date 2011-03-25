@@ -27,6 +27,15 @@ function evip_init() {
     wp_enqueue_style('evip-edit', EVIP_URL . 'css/styles.css');  
 }
     
+    
+// Template selection
+function evip_template_redirect(){
+    global $wp;
+    if ($wp->query_vars["post_type"] == "evipnet") {
+        include(EVIP_PATH . "/single-evipnet.php");
+        die();
+    }
+}
 
 
 function evip_get_posts( $query ) {
@@ -40,5 +49,6 @@ function evip_get_posts( $query ) {
 // display custom post types on wordpress homepage
 add_filter('pre_get_posts', 'evip_get_posts' );
 add_action('plugins_loaded','evip_init');
+add_action('template_redirect', 'evip_template_redirect');
 
 ?>
