@@ -37,6 +37,24 @@ function evip_template_redirect(){
     }
 }
 
+function evip_right_now_admin_widget() {
+        if (!post_type_exists('evipnet')) {
+             return;
+        }
+
+        $num_posts = wp_count_posts( 'evipnet' );
+        $num = number_format_i18n( $num_posts->publish );
+        $text = _n( 'Evipnet', 'EVIPNet Metadata', intval($num_posts->publish) );
+        if ( current_user_can( 'edit_posts' ) ) {
+            $num = "<a href='edit.php?post_type=evipnet'>$num</a>";
+            $text = "<a href='edit.php?post_type=evipnet'>$text</a>";
+        }
+        echo '<td class="first b b-evipnet">' . $num . '</td>';
+        echo '<td class="t evipnet">' . $text . '</td>';
+
+        echo '</tr>';
+
+}
 
 function evip_get_posts( $query ) {
 	if ( is_home() )
@@ -50,5 +68,6 @@ function evip_get_posts( $query ) {
 add_filter('pre_get_posts', 'evip_get_posts' );
 add_action('plugins_loaded','evip_init');
 add_action('template_redirect', 'evip_template_redirect');
+add_action('right_now_content_table_end', 'evip_right_now_admin_widget');
 
 ?>

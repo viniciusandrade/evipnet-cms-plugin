@@ -1,3 +1,7 @@
+#dashboard_right_now .evipnet a {
+    color: #E66F00;
+}
+
 .evip-metabox-field,
 .evip-metabox-field-add {
 	margin-top: .5em;
