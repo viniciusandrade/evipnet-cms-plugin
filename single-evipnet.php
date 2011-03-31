@@ -36,11 +36,10 @@ get_header(); ?>
                        <?php 
                        
                             $meta_fields = get_post_custom($post->ID);
-                            
+                                                        
                             foreach ( $display_fields as $field => $label) {
                                 
-                                $field_value  = $meta_fields[$field][0];
-                                
+                                $field_value  = implode('; ', (array)$meta_fields[$field]);
                                 
                                 if ( $field_value != ''){
                                     if ($field == '_evipnet_fulltext_file'){
@@ -63,7 +62,7 @@ get_header(); ?>
                      </div>
 
                      <!-- Display a comma separated list of the Post's Categories. -->
-                     <p class="postmetadata">Posted in <?php the_category(', '); ?></p>
+                     <!--p class="postmetadata">Posted in <?php the_category(', '); ?></p-->
                      </div> <!-- closes the first div box -->
 
                      <!-- Stop The Loop (but note the "else:" - see next line). -->

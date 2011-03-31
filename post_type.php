@@ -168,10 +168,14 @@ function evipnet_print_metafield($field){
     $field_type = $field["type"];
     $field_description = $field["desc"];
     $field_repeatable = $field["repeatable"];
-   
-    $field_value = get_post_meta($post->ID, $field_id);
-    $field_value = $field_value[0];
-   
+    
+    if ($field_repeatable == true){    
+        $field_value = get_post_custom_values($field_id, $post->ID);
+    }else{            
+        $field_value = get_post_meta($post->ID, $field_id, true);
+    }
+print_r($field_value);
+
     echo '<div class="evip-metabox-field">';
 
     switch ($field_type){
@@ -264,19 +268,35 @@ function save_evipnet_meta($post_id, $post) {
         $evipnet_meta[$id] = $_POST[$id];
     }    
 
-    // Add values of $events_meta as custom fields
+
+    // Add values of $evipnet_meta as custom fields
  
     foreach ($evipnet_meta as $key => $value) { // Cycle through the $evipnet_meta array!
         if( $post->post_type == 'revision' ) return; // Don't store custom data twice
         
         //$value = implode(',', (array)$value); // If $value is an array, make it a CSV (unlikely)
-        
-        if(get_post_meta($post->ID, $key, FALSE)) { // If the custom field already has a value            
-            update_post_meta($post->ID, $key, $value);
-        } else { // If the custom field doesn't have a value
-            add_post_meta($post->ID, $key, $value);
+
+        // treatment for repeatable fields
+        if (is_array($value)){
+            // delete previous version of all occurences of meta field
+            $repeatable_values = get_post_custom_values($key, $post->ID);
+            foreach ( $repeatable_values as $old_rep_value ){
+                delete_post_meta($post->ID, $key, $old_rep_value);
+            }    
+            // add new values for meta field
+            foreach ($value as $new_rep_value){
+                add_post_meta($post->ID, $key, $new_rep_value);
+            }
+        // treatment for single fields
+        }else{        
+            if(get_post_meta($post->ID, $key, FALSE)) { // If the custom field already has a value            
+                update_post_meta($post->ID, $key, $value);
+            } else { // If the custom field doesn't have a value
+                add_post_meta($post->ID, $key, $value);
+            }
+            if(!$value) delete_post_meta($post->ID, $key); // Delete if blank
         }
-        if(!$value) delete_post_meta($post->ID, $key); // Delete if blank
+
     }
  
 }
