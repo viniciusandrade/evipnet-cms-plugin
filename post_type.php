@@ -174,7 +174,6 @@ function evipnet_print_metafield($field){
     }else{            
         $field_value = get_post_meta($post->ID, $field_id, true);
     }
-print_r($field_value);
 
     echo '<div class="evip-metabox-field">';
 
