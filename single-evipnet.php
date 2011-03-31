@@ -4,12 +4,13 @@
  */
 
 $display_fields = array();
-$display_fields['_evipnet_author'] = 'Author ';
-$display_fields['_evipnet_abstract'] = 'Abstract';
-$display_fields['_evipnet_date'] = 'Date';
-$display_fields['_evipnet_journal'] = 'Journal';
-$display_fields['_evipnet_volume'] = 'Volume';
+$display_fields['_evipnet_dc_contribuitor_author'] = 'Author ';
+$display_fields['_evipnet_dc_description_abstract'] = 'Abstract';
+$display_fields['_evipnet_dc_source'] = 'Source';
+$display_fields['_evipnet_volume_issue'] = 'Volume and Issue';
 $display_fields['_evipnet_pages'] = 'Pages';
+$display_fields['_evipnet_dc_date_issued'] = 'Date';
+$display_fields['_evipnet_dc_publisher'] = 'Publisher';
 $display_fields['_evipnet_fulltext_url'] = 'Full text URL';
 $display_fields['_evipnet_fulltext_file'] = 'Full text file';
 
