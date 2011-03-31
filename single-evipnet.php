@@ -58,6 +58,12 @@ get_header(); ?>
                                 }
                            }     
                        ?>
+                       
+                       <?php echo get_the_term_list( $post->ID, 'evipnet_keywords', '<p>Keyword(s)  : ', ', ', '</p>' ) ?>
+                       <?php echo get_the_term_list( $post->ID, 'evipnet_countries', '<p>Country(ies)  : ', ', ', '</p>' ) ?>
+                       <?php echo get_the_term_list( $post->ID, 'evipnet_language', '<p>Language(s) : ', ', ', '</p>' ) ?>
+                       <?php echo get_the_term_list( $post->ID, 'evipnet_topics', '<p>Topic(s) : ', ', ', '</p>' ) ?>
+                       <?php echo get_the_term_list( $post->ID, 'type_of_evidence', '<p>Type of evidence(s) : ', ', ', '</p>' ) ?>
 
                      </div>
 
