@@ -81,38 +81,47 @@ function create_evipnet_post_type() {
 /* Adds a box to the main column on the Post and Page edit screens */
 
 
-$meta_fields[] = array( "name" => "Author",
-                        "desc" => "Document author",
-                        "id" => "_evipnet_author",
+$meta_fields[] = array( "name" => "Author/Creator",
+                        "desc" => "Examples of a creator include a person or an organisation. Use Surname, Name. Ex. Duncan, Phyllis-Anne",
+                        "help_url " => "http://dublincore.org/documents/2000/07/16/usageguide/sectc.shtml#creator",
+                        "id" => "_evipnet_dc_contribuitor_author",
+                        "repeatable" => true,
                         "type" => "text");
 
 $meta_fields[] = array( "name" => "Abstract",
-                        "desc" => "Document abstract",
-                        "id" => "_evipnet_abstract",
+                        "desc" => "Abstract or summary",
+                        "help_url" => "http://dublincore.org/documents/2000/07/16/usageguide/sectb.shtml#description",
+                        "id" => "_evipnet_dc_description_abstract",
                         "type" => "textarea");
 
-$meta_fields[] = array( "name" => "Date",
-                        "desc" => "Publish date",
-                        "id" => "_evipnet_date",
+$meta_fields[] = array( "name" => "Source",
+                        "desc" => "The present resource may be derived from the Source resource in whole or part. Ex. Library and Information Science Research; Shakespeare's Romeo and Juliet",
+                        "id" => "_evipnet_dc_source",
                         "type" => "text");
 
-$meta_fields[] = array( "name" => "Journal",
-                        "desc" => "Journal",
-                        "id" => "_evipnet_journal",
-                        "type" => "text");
-
-$meta_fields[] = array( "name" => "Volume",
-                        "desc" => "Volume",
-                        "id" => "_evipnet_volume",
+$meta_fields[] = array( "name" => "Volume and Issue",
+                        "desc" => "Referent volume number and issue. Ex. Use 22(3) for Volume 22 Issue 3.",
+                        "id" => "_evipnet_volume_issue",
                         "type" => "text");
 
 $meta_fields[] = array( "name" => "Page numbers",
-                        "desc" => "Page numbers",
+                        "desc" => "Start and end page. Ex. 311-338",
                         "id" => "_evipnet_pages",
                         "type" => "text");
 
+$meta_fields[] = array( "name" => "Date",
+                        "desc" => "Date of publication or distribution. Use  month and year (YYYY-MM) or just year (YYYY). Ex. 201103",
+                        "help_url" => "http://dublincore.org/documents/2000/07/16/usageguide/sectd.shtml#date",
+                        "id" => "_evipnet_dc_date_issued",
+                        "type" => "text");
+
+$meta_fields[] = array( "name" => "Publisher",
+                        "desc" => "Entity responsible for publication, distribution, or imprint. Ex. University of Miami. Dept. of Economics",
+                        "id" => "_evipnet_dc_publisher",
+                        "type" => "text");
+
 $meta_fields[] = array( "name" => "Full text URL",
-                        "desc" => "Full text URL",
+                        "desc" => "Link to full text document. Ex. http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2568870/",
                         "id" => "_evipnet_fulltext_url",
                         "type" => "text");
 
@@ -136,7 +145,7 @@ function evipnet_inner_custom_box() {
     
     // Noncename needed to verify where the data originated
     echo '<input type="hidden" name="evipnet_noncename" id="evipnet_noncename" value="' . wp_create_nonce( plugin_basename(__FILE__) ) . '" />';
-
+   
     echo '<div class="evip-metabox-field-group">';
     
     foreach ($meta_fields as $field){
@@ -157,20 +166,36 @@ function evipnet_print_metafield($field){
     $field_id = $field["id"];
     $field_name = $field["name"];
     $field_type = $field["type"];
-    
-    $field_value = get_post_meta($post->ID, $field_id, true);
-    
+    $field_description = $field["desc"];
+    $field_repeatable = $field["repeatable"];
+   
+    $field_value = get_post_meta($post->ID, $field_id);
+    $field_value = $field_value[0];
+   
     echo '<div class="evip-metabox-field">';
-    
-            
+
     switch ($field_type){
         case 'text':
             echo '    <div class="evip-metabox-field-col1">';
             echo '        <label for="' . $field_id . '">'. $field_name .'</label>';
+            echo '        <p class="howto">' . $field_description . '</p>';
             echo '    </div>';
-            echo '    <div class="evip-metabox-field-col2">';
-            echo '        <input class="text" name="'. $field_id . '" id="' . $field_id . '" value="' . $field_value . '">';            
-            echo '     </div>';
+            echo '    <div class="evip-metabox-field-col2" id="' . $field_id .'">';
+            
+            if ($field_repeatable == true){
+                $count_item = 0;
+                foreach ($field_value as $item_value){
+                    if ($item_value != ''){
+                        echo '<input class="text" name="'. $field_id . '[]" id="' . $field_id . '" value="' . $item_value . '">';
+                        $count_item++;
+                        if ($count_item == 1)
+                            echo '<input type="button" class="addButton" value="add new"/>';
+                    }
+                }
+            }else{
+                echo '<input class="text" name="'. $field_id . '" id="' . $field_id . '" value="' . $field_value . '">';
+            }            
+            echo '    </div>';
             break;
         case 'textarea':
             echo '     <div class="evip-metabox-field-col1">';
@@ -178,7 +203,7 @@ function evipnet_print_metafield($field){
             echo '     </div>';
 
             echo '     <div class="evip-metabox-field-col2">';            
-            echo '        <textarea id="' . $field_id . '" name="'. $field_id . '" rows="5">' . $field_value . ' </textarea>';
+            echo '        <textarea id="' . $field_id . '" name="'. $field_id . '" rows="5">' . $field_value . '</textarea>';
             echo '     </div>';
             break;
         case 'file':
@@ -240,10 +265,12 @@ function save_evipnet_meta($post_id, $post) {
 
     // Add values of $events_meta as custom fields
  
-    foreach ($evipnet_meta as $key => $value) { // Cycle through the $events_meta array!
+    foreach ($evipnet_meta as $key => $value) { // Cycle through the $evipnet_meta array!
         if( $post->post_type == 'revision' ) return; // Don't store custom data twice
-        $value = implode(',', (array)$value); // If $value is an array, make it a CSV (unlikely)
-        if(get_post_meta($post->ID, $key, FALSE)) { // If the custom field already has a value
+        
+        //$value = implode(',', (array)$value); // If $value is an array, make it a CSV (unlikely)
+        
+        if(get_post_meta($post->ID, $key, FALSE)) { // If the custom field already has a value            
             update_post_meta($post->ID, $key, $value);
         } else { // If the custom field doesn't have a value
             add_post_meta($post->ID, $key, $value);

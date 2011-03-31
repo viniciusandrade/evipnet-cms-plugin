@@ -120,11 +120,40 @@
 			$.each(params, function(key, val) {
 				frm_filter.append("<input type='hidden' name='"+key+"' value='"+val+"' />");
 			});	
-
 		}
+        
+      $(".addButton").live("click", function () {
+            var inputDiv="#" + $(this).closest('div').attr("id");
+            var inputId=$(this).closest('div').find('input').attr("name");
+            alert(inputDiv);
+            
+            var newTextBoxDiv = $(document.createElement('div'))
+                .attr("id", 'TextBoxDiv' + counter);
+
+            newTextBoxDiv.html('<input type="text" name="' + inputId + '" id="textbox' + counter + 
+                    '" value="" class="text">');
+
+            newTextBoxDiv.appendTo(inputDiv);
+            counter++;
+      });
+
+     $(".removeButton").live("click", function () {
+        counter--;
+        $("#TextBoxDiv" + counter).remove();
+
+     });
+
+     $("#getButtonValue").click(function () {
+
+        var msg = '';
+        for(i=1; i<counter; i++){
+            msg += "\n Textbox #" + i + " : " + $('#textbox' + i).val();
+        }
+       alert(msg);
+     });
+        
 		
 	});
-
 
 }(jQuery));
 
@@ -133,6 +162,7 @@
 // global js stuff; sorry about that...
 var simple_fields_metabox_field_file_select_input_selectedID = null;
 var simple_fields_is_simple_fields_popup = false;
+var counter = 2;
 
 // called when selecting file from tiny-area, if I remember correct
 function simple_fields_metabox_file_select(file_id, file_thumb, file_name) {
