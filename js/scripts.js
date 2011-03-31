@@ -125,8 +125,7 @@
       $(".addButton").live("click", function () {
             var inputDiv="#" + $(this).closest('div').attr("id");
             var inputId=$(this).closest('div').find('input').attr("name");
-            alert(inputDiv);
-            
+           
             var newTextBoxDiv = $(document.createElement('div'))
                 .attr("id", 'TextBoxDiv' + counter);
 

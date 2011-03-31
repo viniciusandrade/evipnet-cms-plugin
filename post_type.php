@@ -183,13 +183,14 @@ function evipnet_print_metafield($field){
             echo '    <div class="evip-metabox-field-col2" id="' . $field_id .'">';
             
             if ($field_repeatable == true){
-                $count_item = 0;
-                foreach ($field_value as $item_value){
-                    if ($item_value != ''){
-                        echo '<input class="text" name="'. $field_id . '[]" id="' . $field_id . '" value="' . $item_value . '">';
-                        $count_item++;
-                        if ($count_item == 1)
-                            echo '<input type="button" class="addButton" value="add new"/>';
+                echo '<input class="text" name="'. $field_id . '[]" id="' . $field_id . '" value="' . $field_value[0] . '">';
+                echo '<input type="button" class="addButton" value="add +"/>';
+                if (count($field_value) > 1){
+                    $count_item = 0;
+                    foreach ($field_value as $item_value){
+                            $count_item++;
+                            if ($count_item > 1 && $item_value != '') 
+                                echo '<input class="text" name="'. $field_id . '[]" id="' . $field_id . '" value="' . $item_value . '">';
                     }
                 }
             }else{
