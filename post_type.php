@@ -31,7 +31,7 @@ function create_evipnet_post_type() {
                        'evipnet', 
                         array( 
                             'hierarchical' => false, 
-                            'label' => 'Keywords', 
+                            'label' => 'Mesh Terms', 
                             'query_var' => false, 
                             'rewrite' => false 
                         ) 
@@ -95,7 +95,7 @@ $meta_fields[] = array( "name" => "Abstract",
                         "type" => "textarea");
 
 $meta_fields[] = array( "name" => "Source",
-                        "desc" => "The present resource may be derived from the Source resource in whole or part. Ex. Library and Information Science Research; Shakespeare's Romeo and Juliet",
+                        "desc" => "Journal Title. Ex. Library and Information Science Research",
                         "id" => "_evipnet_dc_source",
                         "type" => "text");
 
@@ -105,12 +105,12 @@ $meta_fields[] = array( "name" => "Volume and Issue",
                         "type" => "text");
 
 $meta_fields[] = array( "name" => "Page numbers",
-                        "desc" => "Start and end page. Ex. 311-338",
+                        "desc" => "Article start and end page. Ex. 311-338. For monographs use total of pages.",
                         "id" => "_evipnet_pages",
                         "type" => "text");
 
 $meta_fields[] = array( "name" => "Date",
-                        "desc" => "Date of publication or distribution. Use  month and year (YYYY-MM) or just year (YYYY). Ex. 201103",
+                        "desc" => "Date of publication. Use year, month and day (YYYYMMDD). Ex. 20120310",
                         "help_url" => "http://dublincore.org/documents/2000/07/16/usageguide/sectd.shtml#date",
                         "id" => "_evipnet_dc_date_issued",
                         "type" => "text");
